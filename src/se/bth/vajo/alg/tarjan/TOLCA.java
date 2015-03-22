@@ -1,5 +1,11 @@
 package se.bth.vajo.alg.tarjan;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 public class TOLCA {
 	/*
 	 * OK uppgift. Vi har ju pratat något om den. Det blir en del att koda
@@ -41,7 +47,7 @@ public class TOLCA {
 	 * implementation of the disjoint-set data structure in Section 21.3.
 	 */
 
-	Tree T;
+//	Tree T;
 
 	/**
 	 * Unites the dynamic sets that contain x and y, say Sx and Sy, into a new
@@ -57,14 +63,14 @@ public class TOLCA {
 	 * @param u
 	 * @param v
 	 */
-	private void union(Node x, Node y) {
+	private void union(VNode x, VNode y) {
 		// Make the root of one set point to the root of the other
 		findSet(x).setParent = findSet(y);
 		
 	}
 
 	
-	private void link(Node x, Node y) {
+	private void link(VNode x, VNode y) {
 //		if (x.representativera)
 	}
 	
@@ -74,8 +80,8 @@ public class TOLCA {
 	 * @param u
 	 * @return
 	 */
-	private Node findSet(Node x) {
-		Node retVal = null;
+	private VNode findSet(VNode x) {
+		VNode retVal = null;
 		while (x.setParent != null) {
 			retVal = findSet(x.setParent);
 		}
@@ -91,35 +97,41 @@ public class TOLCA {
 	 * 
 	 * @param u
 	 */
-	private Set makeSet(Node u) {
+	private Set makeSet(VNode u) {
 		return new Set(u);
 	}
 
 
 
-	private void LCA(Node u) {
+	private void LCA(VNode u) {
 		makeSet(u);
 		findSet(u).ancestor = u;
-		for (Node v : u.children) {
+		for (VNode v : u.children) {
 			LCA(v);
 			union(u, v);
 			findSet(u).ancestor = u;
 		}
 	}
 
-	private void run() {
+	private void run() throws ParserConfigurationException, SAXException, IOException {
 		NameFileReader nameReader = new NameFileReader();
-		T = new Tree();
+		Tree T = new Tree();
 		T.buildTree(nameReader.readFile());
 
 		T.printTree(T.getRoot(), 0);
-		XMLTreeWriter writer = new XMLTreeWriter();
+
 		
-		System.out.println("\nNUMBER OF DESCENDANTS: " + Node.NDESCENDANTS);
-		writer.generateFile(T.getRoot());
+		XMLTree xml = new XMLTree();
+		xml.generateFile(T.getRoot());
+
+		
+		Tree T2 = new Tree();
+		T2 = xml.buildTree();
+		T2.printTree(T2.getRoot(), 0);
+		System.out.println("\nNUMBER OF DESCENDANTS: " + VNode.NDESCENDANTS);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 		TOLCA t = new TOLCA();
 		t.run();
 	}

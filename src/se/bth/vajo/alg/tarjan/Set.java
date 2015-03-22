@@ -1,9 +1,9 @@
 package se.bth.vajo.alg.tarjan;
 
 public class Set {
-	public Node representative;
+	public VNode representative;
 	
-	public Set(Node representativeArg) {
+	public Set(VNode representativeArg) {
 		this.representative = representativeArg;
 	}
 

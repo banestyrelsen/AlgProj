@@ -9,27 +9,31 @@ import java.util.Random;
 public class Tree {
 	Random rnd;
 	ArrayList<String> names;
-	Node root;
+	VNode root;
 
 	public void buildTree(List<String> namesArg) {
 		names = (ArrayList<String>) namesArg;
 		rnd = new Random();
-		root = new Node("EVE", null, 1000, 1);
+		root = new VNode("EVE", null, 1000, 1);
 		generateDescendants(root);
 	}
 
-	public Node getRoot() {
+	public VNode getRoot() {
 		return root;
 	}
 
+	public Tree setRoot(VNode n) {
+		root = n;
+		return this;
+	}
 	
-	private void generateDescendants(Node ancestor) {
+	private void generateDescendants(VNode ancestor) {
 		// Add children
 		for (int i = 0; i < rnd.nextInt(CONSTANTS.MAX_CHILDRENPERNODE); i++) {
 			generateDescendant(ancestor);
 		}		
 		// Recursively add grandchildren
-		for (Node n : ancestor.children) {
+		for (VNode n : ancestor.children) {
 			generateDescendants(n);
 		}
 	}
@@ -38,9 +42,9 @@ public class Tree {
 	 * Adds one descendant to a parent node and recurses. 
 	 * @param ancestor
 	 */
-	private void generateDescendant(Node ancestor) {
+	private void generateDescendant(VNode ancestor) {
 		if (ancestor.generation < CONSTANTS.MAX_TREE_DEPTH
-				&& Node.NDESCENDANTS <= CONSTANTS.MAX_NODES) {
+				&& VNode.NDESCENDANTS <= CONSTANTS.MAX_NODES) {
 			ancestor.addChild(generateName(), ancestor,
 					ancestor.born + rnd.nextInt(20) + 18);
 		}
@@ -50,9 +54,9 @@ public class Tree {
 		return names.get(rnd.nextInt(names.size() - 1));
 	}
 
-	public void printTree(Node current, int indentLevel) {
+	public void printTree(VNode current, int indentLevel) {
 		System.out.println(indent(indentLevel) + current.toString());
-		for (Node n : current.children) {
+		for (VNode n : current.children) {
 			printTree(n, indentLevel + 1);
 		}
 		

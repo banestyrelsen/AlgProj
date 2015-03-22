@@ -6,25 +6,25 @@ import java.util.List;
 import se.bth.vajo.alg.tarjan.CONSTANTS.NODE_COLOR;
 
 
-public class Node {
+public class VNode {
 	public static int NDESCENDANTS = -1;
 	public final String name;
-	public Node ancestor;
-	public List<Node> children;
+	public VNode ancestor;
+	public List<VNode> children;
 	public NODE_COLOR color;
 	public final int born;
 	public final int generation;
 	
 	// Set variables
 	public int rank;
-	public Node setParent;
+	public VNode setParent;
 	
-	public Node (String nameArg, Node ancestorArg, int bornArg, int generationArg) {
+	public VNode (String nameArg, VNode ancestorArg, int bornArg, int generationArg) {
 		NDESCENDANTS++;
 		ancestor = ancestorArg;
 		name = nameArg;
 		color = NODE_COLOR.WHITE;
-		children = new ArrayList<Node>();
+		children = new ArrayList<VNode>();
 		born = bornArg;
 		generation = generationArg;
 		
@@ -33,9 +33,13 @@ public class Node {
 		setParent = null;
 	}
 	
-	public void addChild(String nameArg, Node ancestorArg, int bornArg) {
+	public void addChild(String nameArg, VNode ancestorArg, int bornArg) {
 		
-		this.children.add(new Node(nameArg, ancestorArg, bornArg, this.generation + 1));
+		this.children.add(new VNode(nameArg, ancestorArg, bornArg, this.generation + 1));
+	}
+	
+	public void addChild(VNode n) {		
+		this.children.add(n);
 	}
 	
 	public String toString() {
