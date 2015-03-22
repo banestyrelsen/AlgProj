@@ -15,6 +15,10 @@ public class Node {
 	public final int born;
 	public final int generation;
 	
+	// Set variables
+	public int rank;
+	public Node setParent;
+	
 	public Node (String nameArg, Node ancestorArg, int bornArg, int generationArg) {
 		NDESCENDANTS++;
 		ancestor = ancestorArg;
@@ -23,6 +27,10 @@ public class Node {
 		children = new ArrayList<Node>();
 		born = bornArg;
 		generation = generationArg;
+		
+		// Set variables;
+		rank = -1;
+		setParent = null;
 	}
 	
 	public void addChild(String nameArg, Node ancestorArg, int bornArg) {

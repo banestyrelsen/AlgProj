@@ -1,6 +1,8 @@
 package se.bth.vajo.alg.tarjan;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -10,13 +12,9 @@ public class Tree {
 	Node root;
 
 	public void buildTree(List<String> namesArg) {
-
 		names = (ArrayList<String>) namesArg;
-		// Collections.shuffle(names);
-		// System.out.println("Shuffled");
 		rnd = new Random();
 		root = new Node("EVE", null, 1000, 1);
-
 		generateDescendants(root);
 	}
 
@@ -24,19 +22,22 @@ public class Tree {
 		return root;
 	}
 
+	
 	private void generateDescendants(Node ancestor) {
-
 		// Add children
 		for (int i = 0; i < rnd.nextInt(CONSTANTS.MAX_CHILDRENPERNODE); i++) {
 			generateDescendant(ancestor);
-		}
+		}		
 		// Recursively add grandchildren
 		for (Node n : ancestor.children) {
 			generateDescendants(n);
 		}
-
 	}
 
+	/**
+	 * Adds one descendant to a parent node and recurses. 
+	 * @param ancestor
+	 */
 	private void generateDescendant(Node ancestor) {
 		if (ancestor.generation < CONSTANTS.MAX_TREE_DEPTH
 				&& Node.NDESCENDANTS <= CONSTANTS.MAX_NODES) {
