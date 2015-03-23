@@ -1,6 +1,7 @@
 package se.bth.vajo.alg.tarjan;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -47,7 +48,7 @@ public class TOLCA {
 	 * implementation of the disjoint-set data structure in Section 21.3.
 	 */
 
-//	Tree T;
+	// Tree T;
 
 	/**
 	 * Unites the dynamic sets that contain x and y, say Sx and Sy, into a new
@@ -62,76 +63,124 @@ public class TOLCA {
 	 * 
 	 * @param u
 	 * @param v
+	 * @throws InterruptedException 
 	 */
-	private void union(VNode x, VNode y) {
+	private void union(VNode x, VNode y) throws InterruptedException {
 		// Make the root of one set point to the root of the other
-		findSet(x).setParent = findSet(y);
-		
+		 findSet(y).setAncestor(x); 
+//		VNode xRoot = findSet(x);
+//		VNode yRoot = findSet(y);
+//		if (xRoot.getRank() < yRoot.getRank()) {
+//			yRoot.setSetParent(xRoot);
+//		} else if (xRoot.getRank() > yRoot.getRank()) {
+//			xRoot.setSetParent(yRoot);
+//		} else if (!xRoot.equals(yRoot)) {
+//			yRoot.setSetParent(xRoot);
+//			xRoot.setRank(xRoot.getRank() + 1);
+//		}
+//		link(findSet(x), findSet(y));
 	}
 
-	
-	private void link(VNode x, VNode y) {
-//		if (x.representativera)
-	}
-	
 	/**
 	 * Returns a pointer to the representative of the unique set containing x.
 	 * 
 	 * @param u
 	 * @return
+	 * @throws InterruptedException 
 	 */
-	private VNode findSet(VNode x) {
-		VNode retVal = null;
-		while (x.setParent != null) {
-			retVal = findSet(x.setParent);
+	private VNode findSet(VNode x) throws InterruptedException {
+//		System.out.println("findSet");
+//		System.out.println("x = " + x.toString());
+//		System.out.println("x.ancestor = " + x.getAncestor().toString());
+		Thread.sleep(10);
+		if (!x.equals(x.getAncestor())){
+			x.setAncestor(findSet(x.getAncestor()));
 		}
-		return retVal;
+		return x.getAncestor();
 	}
-	
-	
-	
+
+	private void link(VNode x, VNode y) {
+		System.out.println("link");
+		if (x.getRank() > y.getRank()) {
+			y.setAncestor(x);
+		} else {
+			x.setAncestor(y);
+			if (x.getRank() == y.getRank()) {
+				y.setRank(y.getRank() + 1);
+			}
+		}
+	}
+
 	/**
 	 * Creates a new set whose only member (and thus representative) is x. Since
 	 * the sets are disjoint, we require that x not already be in some other
 	 * set.
 	 * 
+	 * Removes u to a singleton set,
+	 * 
 	 * @param u
+	 * @throws InterruptedException 
 	 */
-	private Set makeSet(VNode u) {
-		return new Set(u);
+	private void makeSet(VNode u) throws InterruptedException {
+		System.out.println("makeSet " + u.toString());
+		u.setAncestor(u);
+		u.setRank(0);
+//		Thread.sleep(1000);
 	}
 
-
-
-	private void LCA(VNode u) {
+	private void LCA(VNode u) throws InterruptedException {
 		makeSet(u);
-		findSet(u).ancestor = u;
-		for (VNode v : u.children) {
+		findSet(u).setAncestor(u);
+//		Thread.sleep(1000);
+		for (VNode v : u.getChildren()) {
 			LCA(v);
 			union(u, v);
-			findSet(u).ancestor = u;
+//			System.out.println(" findSet from loop ");
+			findSet(u).setAncestor(u);
+		}
+		u.setColor(CONSTANTS.NODE_COLOR.BLACK);
+		if (testNodes.get(0).getColor() == CONSTANTS.NODE_COLOR.BLACK && testNodes.get(1).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
+			System.out.println("LCA of " + testNodes.get(0).toString() + " and " + testNodes.get(1).toString() + " is " + findSet(testNodes.get(1)).getSetParent());
 		}
 	}
 
-	private void run() throws ParserConfigurationException, SAXException, IOException {
-		NameFileReader nameReader = new NameFileReader();
-		Tree T = new Tree();
-		T.buildTree(nameReader.readFile());
+	ArrayList<VNode> testNodes; // Node pairs, test cases
 
-		T.printTree(T.getRoot(), 0);
+	private void run() throws ParserConfigurationException, SAXException,
+			IOException, InterruptedException {
 
-		
 		XMLTree xml = new XMLTree();
-		xml.generateFile(T.getRoot());
 
-		
+		// NameFileReader nameReader = new NameFileReader();
+		// Tree T = new Tree();
+		// T.buildTree(nameReader.readFile());
+		// T.printTree(T.getRoot(), 0);
+		// xml.generateFile(T.getRoot());
+
 		Tree T2 = new Tree();
-		T2 = xml.buildTree();
+		T2 = xml.buildTree(CONSTANTS.CASE_100_CHILDREN);
 		T2.printTree(T2.getRoot(), 0);
-		System.out.println("\nNUMBER OF DESCENDANTS: " + VNode.NDESCENDANTS);
+		System.out.println("\nNUMBER OF DESCENDANTS: "
+				+ VNode.getNDESCENDANTS());
+
+		testNodes = xml.getTestNodes();
+		System.out.println("Test nodes:");
+		for (VNode t : testNodes) {
+			System.out.println(t.toString() + " " + t.printAncestry());
+		}
+
+		LCA(T2.getRoot());
+		// if (testNodes.get(1).color == CONSTANTS.NODE_COLOR.BLACK) {
+		// System.out.println("The least common ancestor of "
+		// + testNodes.get(0).toString() + " and "
+		// + testNodes.get(1).toString() + " is "
+		// + findSet(testNodes.get(0)).ancestor);
+		// }
+
 	}
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+	public static void main(String[] args) throws ParserConfigurationException,
+			SAXException, IOException, InterruptedException {
 		TOLCA t = new TOLCA();
 		t.run();
 	}

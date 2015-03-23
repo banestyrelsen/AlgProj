@@ -26,27 +26,30 @@ public class Tree {
 		root = n;
 		return this;
 	}
-	
+
 	private void generateDescendants(VNode ancestor) {
+
 		// Add children
 		for (int i = 0; i < rnd.nextInt(CONSTANTS.MAX_CHILDRENPERNODE); i++) {
 			generateDescendant(ancestor);
-		}		
+		}
 		// Recursively add grandchildren
-		for (VNode n : ancestor.children) {
+		for (VNode n : ancestor.getChildren()) {
 			generateDescendants(n);
 		}
+
 	}
 
 	/**
-	 * Adds one descendant to a parent node and recurses. 
+	 * Adds one descendant to a parent node and recurses.
+	 * 
 	 * @param ancestor
 	 */
 	private void generateDescendant(VNode ancestor) {
-		if (ancestor.generation < CONSTANTS.MAX_TREE_DEPTH
-				&& VNode.NDESCENDANTS <= CONSTANTS.MAX_NODES) {
+		if (ancestor.getGeneration() < CONSTANTS.MAX_TREE_DEPTH
+				&& VNode.getNDESCENDANTS() < CONSTANTS.MAX_NODES) {
 			ancestor.addChild(generateName(), ancestor,
-					ancestor.born + rnd.nextInt(20) + 18);
+					ancestor.getBorn() + rnd.nextInt(20) + 18);
 		}
 	}
 
@@ -56,10 +59,10 @@ public class Tree {
 
 	public void printTree(VNode current, int indentLevel) {
 		System.out.println(indent(indentLevel) + current.toString());
-		for (VNode n : current.children) {
+		for (VNode n : current.getChildren()) {
 			printTree(n, indentLevel + 1);
 		}
-		
+
 	}
 
 	private String indent(int indent) {

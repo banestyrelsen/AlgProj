@@ -2,6 +2,8 @@ package se.bth.vajo.alg.tarjan;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,18 +22,13 @@ import org.xml.sax.SAXException;
 
 public class XMLTree {
 
-	Document doc;
+	private Document doc;
 
-	private void attachNode(Element parent, VNode currentNode) {
-		Element node = doc.createElement("node");
-		node.setAttribute("name", currentNode.name);
-		node.setAttribute("born", currentNode.born + "");
-		for (VNode n : currentNode.children) {
-			attachNode(node, n);
-		}
-		parent.appendChild(node);
-	}
-
+	/**
+	 * Save an existing tree to file.
+	 * 
+	 * @param root
+	 */
 	public void generateFile(VNode root) {
 		try {
 
@@ -45,7 +42,7 @@ public class XMLTree {
 			doc.appendChild(rootElement);
 
 			// staff elements
-			attachNode(rootElement, root);
+			attachNodeElement(rootElement, root);
 
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory
@@ -53,13 +50,9 @@ public class XMLTree {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File(CONSTANTS.FILENAME));
-
-			// Output to console for testing
-			// StreamResult result = new StreamResult(System.out);
-
 			transformer.transform(source, result);
 
-			System.out.println("File saved!");
+			System.out.println("File '" + CONSTANTS.FILENAME + "'" + " saved.");
 
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
@@ -68,18 +61,51 @@ public class XMLTree {
 		}
 	}
 
-	public Tree buildTree() throws ParserConfigurationException, SAXException,
-			IOException {
-//		VNode root = new VNode("EVE", null, 1000, 1);
+	/**
+	 * Recursively build the dom.
+	 * 
+	 * @param parent
+	 * @param currentNode
+	 */
+	private void attachNodeElement(Element parent, VNode currentNode) {
+		Element node = doc.createElement("node");
+		node.setAttribute("name", currentNode.getName());
+		node.setAttribute("born", currentNode.getBorn() + "");
+		for (VNode n : currentNode.getChildren()) {
+			attachNodeElement(node, n);
+		}
+		parent.appendChild(node);
+	}
+	ArrayList<VNode> testNodes;
+	/**
+	 * Build tree from file.
+	 * 
+	 * @param filename
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public Tree buildTree(final String filename)
+			throws ParserConfigurationException, SAXException, IOException {
+		testNodes = new ArrayList<VNode>();
 		Tree t = new Tree();
-		VNode root = readFile();
+		VNode root = readFile(filename);
 		return t.setRoot(root);
 	}
 
-	private VNode readFile() throws ParserConfigurationException, SAXException,
-			IOException {
+	/**
+	 * Construct the tree from the xml file.
+	 * 
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	private VNode readFile(final String filename)
+			throws ParserConfigurationException, SAXException, IOException {
 		VNode root = null;
-		File file = new File(CONSTANTS.FILENAME);
+		File file = new File(filename);
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
 				.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory
@@ -96,9 +122,8 @@ public class XMLTree {
 					root = new VNode(
 							rootElement.getAttribute(CONSTANTS.NODE_NAME_ATTR),
 							null, Integer.parseInt(rootElement
-									.getAttribute(CONSTANTS.NODE_BORN_ATTR)), 1
-									);
-					
+									.getAttribute(CONSTANTS.NODE_BORN_ATTR)), 1);
+
 					addChildren(root, rootElement);
 
 				}
@@ -107,21 +132,50 @@ public class XMLTree {
 		return root;
 
 	}
-	
+
+	/**
+	 * Recursively reconstruct the children.
+	 * 
+	 * @param n
+	 * @param p
+	 */
 	private void addChildren(VNode n, Element p) {
 		NodeList nodeList = p.getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
 				Element childElement = (Element) nodeList.item(i);
-				VNode child = new VNode(childElement.getAttribute(CONSTANTS.NODE_NAME_ATTR), n, Integer.parseInt(childElement
-						.getAttribute(CONSTANTS.NODE_BORN_ATTR)), n.generation + 1);
+				VNode child = new VNode(
+						childElement.getAttribute(CONSTANTS.NODE_NAME_ATTR), n,
+						Integer.parseInt(childElement
+								.getAttribute(CONSTANTS.NODE_BORN_ATTR)),
+						n.getGeneration() + 1);
+				if (isTestNode(child)) {
+					this.testNodes.add(child);
+				}
 				n.addChild(child);
 				addChildren(child, childElement);
 			}
 		}
 	}
+	public ArrayList<VNode> getTestNodes() {
+		return this.testNodes;
+	}
+
+	private boolean isTestNode(VNode n) {
+//		6. FERNANDA, born 1141.
+//		5. KAILEE, born 1112.
+		// LCA should be 2. JANELLE, born 1029.
+		if (n.getBorn() == 1112 && n.getName().equals("KAILEE")) {
+			return true;
+		} else if (n.getBorn() == 1141 && n.getName().equals("FERNANDA")) {
+			return true;
+		} else {
+			return false;
+		}
 	
+		
 
-
+	}
+	
 
 }
