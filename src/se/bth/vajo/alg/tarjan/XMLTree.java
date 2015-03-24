@@ -162,17 +162,37 @@ public class XMLTree {
 	}
 
 	private boolean isTestNode(VNode n) {
+		// 100 nodes test case
 //		6. FERNANDA, born 1141.
 //		5. KAILEE, born 1112.
 		// LCA should be 2. JANELLE, born 1029.
-		if (n.getBorn() == 1112 && n.getName().equals("KAILEE")) {
+//		if (n.getBorn() == 1112 && n.getName().equals("KAILEE")) {
+//			return true;
+//		} else if (n.getBorn() == 1141 && n.getName().equals("FERNANDA")) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		// 20 nodes
+//		4. LYRA, born 1085
+//		4. CECILIA, born 1085
+//		LCA should be 2. RENA, born 1033
+		
+//		if (n.getBorn() == 1085 && n.getName().equals("LYRA")) {
+//			return true;
+//		} else if (n.getBorn() == 1085 && n.getName().equals("CECILIA")) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		if (n.getBorn() == 1081 && n.getName().equals("AILANI")) {
 			return true;
-		} else if (n.getBorn() == 1141 && n.getName().equals("FERNANDA")) {
+		} else if (n.getBorn() == 1076 && n.getName().equals("ELLIOT")) {
 			return true;
 		} else {
 			return false;
 		}
-	
 		
 
 	}

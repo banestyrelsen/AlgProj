@@ -75,40 +75,15 @@ public class VNode {
 	}
 
 	public String printSet() {
-		String set = "\t" + this.name + "'s SET CONTENTS: ";
-		VNode n = this;
-		set += n.toString() + " <- ";
-		while (!n.equals(n.getSetParent())) {
-			n = n.getSetParent();
-			set += n.toString() + " <- ";
+		String set = this.toString();
+		if (!this.ancestor.equals(this)) {
+			set += " <- " + this.ancestor.printSet();
 		}
-		
-		
-//		while (!n.setParent.equals(n)) {
-//			set += n.toString() + " <- ";
-//			System.out.println(n.toString() + " + " + n.setParent.toString());
-//			n = n.setParent;
-//		}
-		
-//		if (this.setParent == this) {
-//			set += ">>>>> SINGLETON <<<<";
-//		} else {
-//
-//
-//			boolean done = false;
-//			VNode parent = this;
-//			set += parent.toString();
-//			while (!done) {
-//				
-//				parent = parent.setParent;	
-//				set += " <- " + parent.toString();
-//				if (parent.equals(parent.setParent)) {
-//					done = true;
-//				}
-//			}
-//		}
 		return set;
 	}
+	
+	
+	
 	public static int getNDESCENDANTS() {
 		return NDESCENDANTS;
 	}
