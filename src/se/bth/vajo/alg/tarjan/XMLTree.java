@@ -76,7 +76,9 @@ public class XMLTree {
 		}
 		parent.appendChild(node);
 	}
+
 	ArrayList<VNode> testNodes;
+
 	/**
 	 * Build tree from file.
 	 * 
@@ -94,6 +96,8 @@ public class XMLTree {
 		return t.setRoot(root);
 	}
 
+	private String filename;
+
 	/**
 	 * Construct the tree from the xml file.
 	 * 
@@ -104,6 +108,7 @@ public class XMLTree {
 	 */
 	private VNode readFile(final String filename)
 			throws ParserConfigurationException, SAXException, IOException {
+		this.filename = filename;
 		VNode root = null;
 		File file = new File(filename);
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
@@ -157,45 +162,75 @@ public class XMLTree {
 			}
 		}
 	}
+
 	public ArrayList<VNode> getTestNodes() {
 		return this.testNodes;
 	}
 
 	private boolean isTestNode(VNode n) {
 		// 100 nodes test case
-//		6. FERNANDA, born 1141.
-//		5. KAILEE, born 1112.
+		// 6. FERNANDA, born 1141.
+		// 5. KAILEE, born 1112.
 		// LCA should be 2. JANELLE, born 1029.
-//		if (n.getBorn() == 1112 && n.getName().equals("KAILEE")) {
-//			return true;
-//		} else if (n.getBorn() == 1141 && n.getName().equals("FERNANDA")) {
-//			return true;
-//		} else {
-//			return false;
-//		}
+		// if (this.filename == CONSTANTS.CASE_20_CHILDREN) {
+
+		if (this.filename == CONSTANTS.CASE_20_CHILDREN) {
+			if (n.getBorn() == 1085 && n.getName().equals("LYRA")) {
+				return true;
+			} else if (n.getBorn() == 1085 && n.getName().equals("CECILIA")) {
+				return true;
+			} else
+				return false;
+
+		} else if (this.filename == CONSTANTS.CASE_100_CHILDREN) {
+			if (n.getBorn() == 1141 && n.getName().equals("FERNANDA")) {
+				return true;
+			} else if (n.getBorn() == 1112 && n.getName().equals("KAILEE")) {
+				return true;
+			} else
+				return false;
+
+		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN) {
+			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+				return true;
+			} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
+				return true;
+			} else
+				return false;
+
+		}else
+			return false;
+
+		
+//		1000 nodes
+//		ALINE, born 1406
+//		ISABELLE, born 1323
+//		LCA should be SAPPHIRE, born 1295
+		
+//		10. JALYNN, born 1243
+//		JULIETTA, born 1325
+//		LCA: CARYS, born 1174
 		
 		// 20 nodes
-//		4. LYRA, born 1085
-//		4. CECILIA, born 1085
-//		LCA should be 2. RENA, born 1033
-		
-//		if (n.getBorn() == 1085 && n.getName().equals("LYRA")) {
-//			return true;
-//		} else if (n.getBorn() == 1085 && n.getName().equals("CECILIA")) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-		if (n.getBorn() == 1081 && n.getName().equals("AILANI")) {
-			return true;
-		} else if (n.getBorn() == 1076 && n.getName().equals("ELLIOT")) {
-			return true;
-		} else {
-			return false;
-		}
-		
+		// 4. LYRA, born 1085
+		// 4. CECILIA, born 1085
+		// LCA should be 2. RENA, born 1033
+
+		// if (n.getBorn() == 1085 && n.getName().equals("LYRA")) {
+		// return true;
+		// } else if (n.getBorn() == 1085 && n.getName().equals("CECILIA")) {
+		// return true;
+		// } else {
+		// return false;
+		// }
+		// if (n.getBorn() == 1081 && n.getName().equals("AILANI")) {
+		// return true;
+		// } else if (n.getBorn() == 1076 && n.getName().equals("ELLIOT")) {
+		// return true;
+		// } else {
+		// return false;
+		// }
 
 	}
-	
 
 }

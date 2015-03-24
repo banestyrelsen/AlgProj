@@ -66,18 +66,23 @@ public class TOLCA {
 	 * @throws InterruptedException
 	 */
 	private void union(VNode u, VNode v) throws InterruptedException {
+		System.out.println("\tPerforming union between sets " + u.printSet() + " AND " + v.printSet());
+		link(findSet(u), findSet(v));
+		System.out.println("Union complete, new set for " + u.getName() + ": " + u.printSet());
+		System.out.println("Union complete, new set for " + v.getName() + ": " + v.printSet());
+//		Thread.sleep(100);
 		// Make the root of one set point to the root of the other
-	     VNode uRoot = findSet(u);
-	     VNode vRoot = findSet(v);
-	     
-	     if (uRoot.getRank() > vRoot.getRank())
-	         vRoot.setAncestor(uRoot);
-	     else if (uRoot.getRank() < vRoot.getRank())
-	         uRoot.setAncestor(vRoot);
-	     else if (uRoot != vRoot) {
-	         vRoot.setAncestor(uRoot);
-	         uRoot.setRank(uRoot.getRank() + 1);
-	     }
+//	     VNode uRoot = findSet(u);
+//	     VNode vRoot = findSet(v);
+//	     
+//	     if (uRoot.getRank() > vRoot.getRank())
+//	         vRoot.setAncestor(uRoot);
+//	     else if (uRoot.getRank() < vRoot.getRank())
+//	         uRoot.setAncestor(vRoot);
+//	     else if (uRoot != vRoot) {
+//	         vRoot.setAncestor(uRoot);
+//	         uRoot.setRank(uRoot.getRank() + 1);
+//	     }
 		
 		
 //		Thread.sleep(500);
@@ -89,7 +94,7 @@ public class TOLCA {
 //				+ v.getAncestor());
 //		
 //		if (v.getRank() == u.getRank()) {
-//			if (findSet(v).getRank() > findSet(v).getGeneration()) {
+//			if (findSet(v).getRank() > findSet(v).getRank()) {
 //				
 //			}
 //			
@@ -115,21 +120,24 @@ public class TOLCA {
 	 * @throws InterruptedException
 	 */
 	private VNode findSet(VNode x) throws InterruptedException {
+		System.out.println("findSet: " + x.toString());
+		System.out.println("\t" + x.printSet());
 		// System.out.println("findSet");
-		// System.out.println("x = " + x.toString());
-		// System.out.println("x.ancestor = " + x.getAncestor().toString());
-		Thread.sleep(10);
+//		 System.out.println("x = " + x.toString());
+		 System.out.println(x.toString() + "'s ancestor = " + x.getAncestor().toString());
+//		Thread.sleep(10);
 		// System.out.println("findSet");
-		if (!x.equals(x.getAncestor())) {
+		if (x.getAncestor() == x) {
+			System.out.println("x == x.anc");
+			return x;
+		} else {			
 			return findSet(x.getAncestor());
-		} else {
-			return x.getAncestor();
 		}
 	}
 
 	private void link(VNode x, VNode y) {
 		System.out.println("link");
-		if (x.getRank() > y.getRank()) {
+		if (x.getRank() < y.getRank()) {
 			y.setAncestor(x);
 		} else {
 			x.setAncestor(y);
@@ -152,7 +160,7 @@ public class TOLCA {
 	private void makeSet(VNode u) throws InterruptedException {
 		System.out.println("makeSet " + u.toString());
 		u.setAncestor(u);
-		u.setRank(0);
+//		u.setRank(0);
 		// Thread.sleep(1000);
 	}
 
@@ -165,23 +173,25 @@ public class TOLCA {
 			LCA(v);
 			union(u, v);
 			// System.out.println(" findSet from loop ");
-			u.setAncestor(u);
-			System.out.println("after union, " + v.getName() + "'s set: \t"
-					+ v.printSet());
-			printChildSets(v, "\t\t\t");
+			findSet(u).setAncestor(u);
+//			System.out.println("after union, " + v.getName() + "'s set: \t"
+//					+ v.printSet());
+//			printChildSets(v, "\t\t\t");
 		}
 		u.setColor(CONSTANTS.NODE_COLOR.BLACK);
 		System.out.println(u.getName() + ".nodeCOlor: " + u.getColor());
 		for (Pair p : P) {
 			if (p.inPair(u) && p.other(u).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
+				System.out.println("*****************************************************");
 				System.out.println(p.other(u).getName() + ".nodeCOlor: " + p.other(u).getColor());
 				System.out.println("p.u.printSet(): " + p.u.printSet());
 				System.out.println("p.v.printSet(): " + p.v.printSet());
-				union(p.u, p.v);
+//				union(p.u, p.v);
 				System.out.println("\nLCA of " + p.u.toString() + " and "
 				+ p.v.toString() + " is:\t "
-				+ findSet(p.v).getAncestor() + " <- ??? \n");
-				Thread.sleep(10000000);
+				+ findSet(p.other(u)).getAncestor() + " <- ??? \n");
+				System.out.println("*****************************************************");
+				Thread.sleep(5000);
 			}
 //			if (u.equals(p.u)) { 
 //				// This node is a test node
@@ -222,8 +232,10 @@ public class TOLCA {
 		// xml.generateFile(T.getRoot());
 
 		Tree T2 = new Tree();
-		T2 = xml.buildTree(CONSTANTS.CASE_20_CHILDREN);
+		T2 = xml.buildTree(CONSTANTS.CASE_1000_CHILDREN);
 		T2.printTree(T2.getRoot(), 0);
+		
+		Thread.sleep(2000);
 		System.out.println("\nNUMBER OF DESCENDANTS: "
 				+ VNode.getNDESCENDANTS());
 
@@ -248,13 +260,13 @@ public class TOLCA {
 		// System.out.println("\t" + testNodes.get(1).getName() + " set: " +
 		// testNodes.get(1).printSet());
 		System.out.println("\n***************************\nFINAL SETS");
-		printChildSets(T2.getRoot(), "\t");
-		if (testNodes.get(1).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
-			System.out.println("The least common ancestor of "
-					+ testNodes.get(0).toString() + " and "
-					+ testNodes.get(1).toString() + " is "
-					+ findSet(testNodes.get(0)).getAncestor());
-		}
+//		printChildSets(T2.getRoot(), "\t");
+//		if (testNodes.get(1).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
+//			System.out.println("The least common ancestor of "
+//					+ testNodes.get(0).toString() + " and "
+//					+ testNodes.get(1).toString() + " is "
+//					+ findSet(testNodes.get(0)).getAncestor());
+//		}
 
 	}
 

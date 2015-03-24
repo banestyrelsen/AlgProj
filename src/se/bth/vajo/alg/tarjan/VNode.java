@@ -76,6 +76,7 @@ public class VNode {
 
 	public String printSet() {
 		String set = this.toString();
+//		System.out.println(set);
 		if (!this.ancestor.equals(this)) {
 			set += " <- " + this.ancestor.printSet();
 		}
