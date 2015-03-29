@@ -73,53 +73,8 @@ public class TOLCA {
 	private long nFindSetOperations = 0;
 
 	private void union(VNode u, VNode v) throws InterruptedException {
-		// System.out.println("\tPerforming union between sets " + u.printSet()
-		// + " AND " + v.printSet());
 		link(findSet(u), findSet(v));
 		nUnionOperations++;
-		// System.out.println("Union complete, new set for " + u.getName() +
-		// ": " + u.printSet());
-		// System.out.println("Union complete, new set for " + v.getName() +
-		// ": " + v.printSet());
-		// Thread.sleep(100);
-		// Make the root of one set point to the root of the other
-		// VNode uRoot = findSet(u);
-		// VNode vRoot = findSet(v);
-		//
-		// if (uRoot.getRank() > vRoot.getRank())
-		// vRoot.setAncestor(uRoot);
-		// else if (uRoot.getRank() < vRoot.getRank())
-		// uRoot.setAncestor(vRoot);
-		// else if (uRoot != vRoot) {
-		// vRoot.setAncestor(uRoot);
-		// uRoot.setRank(uRoot.getRank() + 1);
-		// }
-
-		// Thread.sleep(500);
-		// System.out.println("union of sets(" + u.getName() + "," + v.getName()
-		// + ")\n\t" + u.printSet() + "\n\t" + v.printSet());
-		// System.out.println("\t: " + u.getName() + "'s ancestor "
-		// + u.getAncestor());
-		// System.out.println("\t: " + v.getName() + "'s ancestor "
-		// + v.getAncestor());
-		//
-		// if (v.getRank() == u.getRank()) {
-		// if (findSet(v).getRank() > findSet(v).getRank()) {
-		//
-		// }
-		//
-		// }
-		//
-		// else if (v.getGeneration() > u.getGeneration()) {
-		// v.setAncestor(u);
-		// System.out.println("\t\t: " + v.getName() + "'s new set: "
-		// + v.printSet());
-		// System.out.println("\t\t: " + v.getName() + "'s ancestor "
-		// + v.getAncestor());
-		// printChildSets(v, "\t\t\t");
-		// }
-		// System.out.println();
-
 	}
 
 	/**
@@ -130,14 +85,6 @@ public class TOLCA {
 	 * @throws InterruptedException
 	 */
 	private VNode findSet(VNode x) throws InterruptedException {
-		// System.out.println("findSet: " + x.toString());
-		// System.out.println("\t" + x.printSet());
-		// System.out.println("findSet");
-		// System.out.println("x = " + x.toString());
-		// System.out.println(x.toString() + "'s ancestor = " +
-		// x.getAncestor().toString());
-		// Thread.sleep(10);
-		// System.out.println("findSet");
 		nFindSetOperations++;
 		if (x.getAncestor() == x) {
 			// System.out.println("x == x.anc");
@@ -181,21 +128,14 @@ public class TOLCA {
 	VNode result;
 
 	private void LCA(VNode u) throws InterruptedException {
-		// System.out.println("\nLCA " + u.toString());
 		makeSet(u);
 		findSet(u).setAncestor(u);
-		// Thread.sleep(1000);
 		for (VNode v : u.getChildren()) {
 			LCA(v);
 			union(u, v);
-			// System.out.println(" findSet from loop ");
 			findSet(u).setAncestor(u);
-			// System.out.println("after union, " + v.getName() + "'s set: \t"
-			// + v.printSet());
-			// printChildSets(v, "\t\t\t");
 		}
 		u.setColor(CONSTANTS.NODE_COLOR.BLACK);
-		// System.out.println(u.getName() + ".nodeCOlor: " + u.getColor());
 		for (Pair p : P) {
 			if (p.inPair(u)
 					&& p.other(u).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
@@ -217,29 +157,8 @@ public class TOLCA {
 
 						+ findSet(p.other(u)).getAncestor());
 
-//				Thread.sleep(5000);
 			}
-			// if (u.equals(p.u)) {
-			// // This node is a test node
-			// if (p.v.getColor() == CONSTANTS.NODE_COLOR.BLACK) {
-			// // Its partner has been visited.
-			// System.out.println("YES");
-			// Thread.sleep(1000);
-			// System.out.println("\nLCA of " + p.u.toString() + " and "
-			// + p.v.toString() + " is "
-			// + findSet(p.v).getAncestor() + "\n");
-			// System.out.println("p.u: " + p.u.printSet());
-			// System.out.println("p.v: " + p.v.printSet());
-			// Thread.sleep(1000);
-			// } else {
-			// System.out.println("NOT BLACK, p.v.getColor() = " +
-			// p.v.getColor());
-			// Thread.sleep(1000);
-			// }
-			// } else {
-			// System.out.println("PARTNER NOT VISITED, u != p.u");
-			// Thread.sleep(1000);
-			// }
+
 		}
 
 	}
@@ -264,7 +183,7 @@ public class TOLCA {
 			xml.generateFile(T.getRoot());
 
 		} else {
-			String testCase = CONSTANTS.CASE_1000_CHILDREN_B;
+			String testCase = CONSTANTS.CASE_10K;
 			System.out.println("Reading tree from file: \"" + testCase + "\"");
 			T = xml.buildTree(testCase);
 
@@ -293,11 +212,8 @@ public class TOLCA {
 		System.out.println("Total number of UNION operations: "
 				+ nUnionOperations);
 		
-		printChildSets(T.getRoot(), "");
-//		System.out.println("Elapsed time: " + elapsed / 1000f + " seconds.");
-//		long total = nMakeSetOperations + nFindSetOperations + nUnionOperations;
-//		System.out.println("Operations/second: " + (total / elapsed) * 1000f);
-		// }
+//		printChildSets(T.getRoot(), "");
+
 
 	}
 

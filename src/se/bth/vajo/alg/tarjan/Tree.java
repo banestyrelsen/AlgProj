@@ -71,7 +71,7 @@ public class Tree {
 
 		if (indent > 0) {
 			for (int i = 0; i < indent; i++) {
-				ret += "\t";
+				ret += "  ";
 			}
 		}
 

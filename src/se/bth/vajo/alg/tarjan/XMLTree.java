@@ -191,13 +191,14 @@ public class XMLTree {
 				return false;
 
 		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN) {
-//			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
-//				return true;
-//			} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
-//				return true;
-//			} else
-//				return false;
-			
+			// if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+			// return true;
+			// } else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA"))
+			// {
+			// return true;
+			// } else
+			// return false;
+
 			if (n.getBorn() == 1406 && n.getName().equals("ALINE")) {
 				return true;
 			} else if (n.getBorn() == 1323 && n.getName().equals("ISABELLE")) {
@@ -207,99 +208,52 @@ public class XMLTree {
 
 		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN_B) {
 
-//			10. MAISY:258, born 1261
-//			3. PIPER:241, born 1048
-//			LCA: 1. EVE:0, born 1000
-//			if (n.getId() == 258) {
-//				return true;
-//			} else if (n.getId() == 241) {
-//				return true; }
-//			else
-//				return false;
-
-			
-			
-//			11. ASHLEE:221, born 1254
-//			10. LIA:233, born 1255
-//			LCA: 7. NADINE:157, born 1152
 			if (n.getId() == 221) {
 				return true;
 			} else if (n.getId() == 233) {
-				return true; }
-			else
+				return true;
+			} else
 				return false;
 
-	}
-		
+		}		 else if (this.filename == CONSTANTS.CASE_10K) {
+
+//			if (n.getId() == 9258) {
+//				return true;
+//			} else if (n.getId() == 9285) {
+//				return true;
+//			} else
+//				return false;
+
+			if (n.getId() == 9997) {
+				return true;
+			} else if (n.getId() == 10000) {
+				return true;
+			} else
+				return false;
+			
+
+		}
+
 		else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN) {
-//			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
-//			return true;
-//		} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
-//			return true;
-//		} else
-//			return false; 
-	
 
-		if (n.getId() == 977905) {
-			return true;
-		} else if (n.getId() == 978302) {
-			return true;
-		} else
-			return false;
-	}else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN_1K_GENERATIONS) {
-//		if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
-//		return true;
-//	} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
-//		return true;
-//	} else
-//		return false; 
+			if (n.getId() == 977905) {
+				return true;
+			} else if (n.getId() == 978302) {
+				return true;
+			} else
+				return false;
+		} else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN_1K_GENERATIONS) {
 
+			if (n.getId() == 885168) {
+				return true;
+			} else if (n.getId() == 13038) {
+				return true;
+			} else
+				return false;
+		}
 
-	if (n.getId() == 885168) {
-		return true;
-	} else if (n.getId() == 13038) {
-		return true;
-	} else
-		return false;
-}
-		
 		else
 			return false;
-
-		// 1M nodes
-//		22. PAOLA:977905, born 1557
-//		18. AAHANA:978302, born 1440
-//		LCA: 12. UMA:977840, born 1283
-		
-		
-//		1000 nodes
-//		ALINE, born 1406
-//		ISABELLE, born 1323
-//		LCA should be SAPPHIRE, born 1295
-		
-//		10. JALYNN, born 1243
-//		JULIETTA, born 1325
-//		LCA: CARYS, born 1174
-		
-		// 20 nodes
-		// 4. LYRA, born 1085
-		// 4. CECILIA, born 1085
-		// LCA should be 2. RENA, born 1033
-
-		// if (n.getBorn() == 1085 && n.getName().equals("LYRA")) {
-		// return true;
-		// } else if (n.getBorn() == 1085 && n.getName().equals("CECILIA")) {
-		// return true;
-		// } else {
-		// return false;
-		// }
-		// if (n.getBorn() == 1081 && n.getName().equals("AILANI")) {
-		// return true;
-		// } else if (n.getBorn() == 1076 && n.getName().equals("ELLIOT")) {
-		// return true;
-		// } else {
-		// return false;
-		// }
 
 	}
 
