@@ -36,12 +36,12 @@ public class XMLTree {
 					.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
-			// root elements
+			// Create document and attach root
 			doc = docBuilder.newDocument();
 			Element rootElement = doc.createElement("tree");
 			doc.appendChild(rootElement);
 
-			// staff elements
+			// Attach nodes
 			attachNodeElement(rootElement, root);
 
 			// write the content into xml file
@@ -191,16 +191,86 @@ public class XMLTree {
 				return false;
 
 		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN) {
-			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+//			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+//				return true;
+//			} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
+//				return true;
+//			} else
+//				return false;
+			
+			if (n.getBorn() == 1406 && n.getName().equals("ALINE")) {
 				return true;
-			} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
+			} else if (n.getBorn() == 1323 && n.getName().equals("ISABELLE")) {
 				return true;
 			} else
 				return false;
 
-		}else
+		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN_B) {
+
+//			10. MAISY:258, born 1261
+//			3. PIPER:241, born 1048
+//			LCA: 1. EVE:0, born 1000
+//			if (n.getId() == 258) {
+//				return true;
+//			} else if (n.getId() == 241) {
+//				return true; }
+//			else
+//				return false;
+
+			
+			
+//			11. ASHLEE:221, born 1254
+//			10. LIA:233, born 1255
+//			LCA: 7. NADINE:157, born 1152
+			if (n.getId() == 221) {
+				return true;
+			} else if (n.getId() == 233) {
+				return true; }
+			else
+				return false;
+
+	}
+		
+		else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN) {
+//			if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+//			return true;
+//		} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
+//			return true;
+//		} else
+//			return false; 
+	
+
+		if (n.getId() == 977905) {
+			return true;
+		} else if (n.getId() == 978302) {
+			return true;
+		} else
+			return false;
+	}else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN_1K_GENERATIONS) {
+//		if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
+//		return true;
+//	} else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA")) {
+//		return true;
+//	} else
+//		return false; 
+
+
+	if (n.getId() == 885168) {
+		return true;
+	} else if (n.getId() == 13038) {
+		return true;
+	} else
+		return false;
+}
+		
+		else
 			return false;
 
+		// 1M nodes
+//		22. PAOLA:977905, born 1557
+//		18. AAHANA:978302, born 1440
+//		LCA: 12. UMA:977840, born 1283
+		
 		
 //		1000 nodes
 //		ALINE, born 1406

@@ -14,7 +14,7 @@ public class VNode {
 	private NODE_COLOR color;
 	private final int born;
 	private final int generation;
-
+	private final long id;
 
 
 	// Set variables
@@ -35,7 +35,8 @@ public class VNode {
 		children = new ArrayList<VNode>();
 		born = bornArg;
 		generation = generationArg;
-
+		id = NDESCENDANTS;
+		
 		// Set variables;
 		ancestor = this;
 		rank = generation;
@@ -60,8 +61,12 @@ public class VNode {
 		this.children.add(n);
 	}
 
+	public long getId() {
+		return id;
+	}
+
 	public String toString() {
-		return generation + ". " + name + ", born " + born;
+		return generation + ". " + name +":" +id + ", born " + born;
 	}
 
 	public String printAncestry() {
