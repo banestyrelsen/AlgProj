@@ -2,7 +2,6 @@ package se.bth.vajo.alg.tarjan;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -71,7 +70,10 @@ public class TOLCA {
 	private long nMakeSetOperations = 0;
 	private long nUnionOperations = 0;
 	private long nFindSetOperations = 0;
-
+	private ArrayList<Pair> P;
+	private ArrayList<VNode> testNodes; // Node pairs, test cases
+	private VNode result;
+	
 	private void union(VNode u, VNode v) throws InterruptedException {
 		link(findSet(u), findSet(v));
 		nUnionOperations++;
@@ -86,12 +88,20 @@ public class TOLCA {
 	 */
 	private VNode findSet(VNode x) throws InterruptedException {
 		nFindSetOperations++;
+
+		// WITHOUT path compression
 		if (x.getAncestor() == x) {
-			// System.out.println("x == x.anc");
+
 			return x;
 		} else {
 			return findSet(x.getAncestor());
 		}
+
+		// WITH path compression
+		// if (x.getAncestor() != x) {
+		// x.setAncestor(x.getAncestor());
+		// }
+		// return x.getAncestor();
 
 	}
 
@@ -125,7 +135,6 @@ public class TOLCA {
 		// Thread.sleep(1000);
 	}
 
-	VNode result;
 
 	private void LCA(VNode u) throws InterruptedException {
 		makeSet(u);
@@ -140,22 +149,29 @@ public class TOLCA {
 			if (p.inPair(u)
 					&& p.other(u).getColor() == CONSTANTS.NODE_COLOR.BLACK) {
 				System.out.println("  PAIR FOUND.");
-				System.out.println("  " + "Current node (" +u.toString()+ ") is in the predefined pair, and the node color of its partner (" 
-						+ p.other(u).toString() + ") is: " + p.other(u).getColor() + ".");
+				System.out
+						.println("  "
+								+ "Current node ("
+								+ u.toString()
+								+ ") is in the predefined pair, and the node color of its partner ("
+								+ p.other(u).toString() + ") is: "
+								+ p.other(u).getColor() + ".");
 
 				System.out.println("  " + p.u.getName() + "'s ancestry: "
 						+ p.u.printAncestry());
 				System.out.println("  " + p.v.getName() + "'s ancestry: "
 						+ p.v.printAncestry());
-				System.out.println("  " + p.u.getName() + "'s current set: " + p.u.printSet());
-				System.out.println("  " + p.v.getName() + "'s current set: " + p.v.printSet());
+				System.out.println("  " + p.u.getName() + "'s current set: "
+						+ p.u.printSet());
+				System.out.println("  " + p.v.getName() + "'s current set: "
+						+ p.v.printSet());
 
 				// union(p.u, p.v);
 				result = findSet(p.other(u)).getAncestor();
 				System.out.println("  " + "LCA of " + p.u.toString() + " and "
 						+ p.v.toString() + " is:\t "
 
-						+ findSet(p.other(u)).getAncestor());
+						+ result);
 
 			}
 
@@ -163,7 +179,6 @@ public class TOLCA {
 
 	}
 
-	ArrayList<VNode> testNodes; // Node pairs, test cases
 
 	private void run() throws ParserConfigurationException, SAXException,
 			IOException, InterruptedException {
@@ -173,37 +188,38 @@ public class TOLCA {
 		boolean generate = false;
 
 		if (generate) {
-			System.out.println("Generating new tree with max " + CONSTANTS.MAX_NODES + " nodes and max " + CONSTANTS.MAX_CHILDRENPERNODE + " children per node");
+			System.out.println("Generating new tree with max "
+					+ CONSTANTS.MAX_NODES + " nodes and max "
+					+ CONSTANTS.MAX_CHILDRENPERNODE + " children per node");
 			NameFileReader nameReader = new NameFileReader();
 			T.buildTree(nameReader.readFile());
 			T.printTree(T.getRoot(), 0);
-			System.out.println("\nTree with : "
-					+ VNode.getNDESCENDANTS() + " generated.");
+			System.out.println("\nTree with : " + VNode.getNDESCENDANTS()
+					+ " generated.");
 			System.out.println("Saving tree to file...");
 			xml.generateFile(T.getRoot());
 
 		} else {
-			String testCase = CONSTANTS.CASE_10K;
+			String testCase = CONSTANTS.CASE_100_CHILDREN;
 			System.out.println("Reading tree from file: \"" + testCase + "\"");
 			T = xml.buildTree(testCase);
 
-			T.printTree(T.getRoot(), 0);
+			 T.printTree(T.getRoot(), 0);
 		}
 		// Thread.sleep(2000);
-		System.out.println("Tree with " + VNode.getNDESCENDANTS() + " descendants generated. ");
+		System.out.println("Tree with " + VNode.getNDESCENDANTS()
+				+ " descendants generated. ");
 		testNodes = xml.getTestNodes();
 		P = new ArrayList<Pair>();
 		addPairs(testNodes);
-		
+
 		System.out.println("\nCalculating LCA of nodes " + P.get(0).toString());
 		System.out.println("Traversing tree...");
-//		System.out.println("Starting timer...");
-		long start = new Date().getTime();		
+		// System.out.println("Starting timer...");
+		// long start = new Date().getTime();
 		LCA(T.getRoot());
-		long done = new Date().getTime();		
-		long elapsed = done - start;
-		
-		
+		// long done = new Date().getTime();
+		// long elapsed = done - start;
 
 		System.out.println("\nTotal number of MAKE-SET operations: "
 				+ nMakeSetOperations);
@@ -211,13 +227,12 @@ public class TOLCA {
 				+ nFindSetOperations);
 		System.out.println("Total number of UNION operations: "
 				+ nUnionOperations);
-		
-//		printChildSets(T.getRoot(), "");
 
+		// printChildSets(T.getRoot(), "");
 
 	}
 
-	private ArrayList<Pair> P;
+
 
 	private void addPairs(ArrayList<VNode> pairs) {
 		for (int i = 0; i < pairs.size(); i += 2) {
@@ -245,12 +260,12 @@ public class TOLCA {
 
 	}
 
-	private void printChildSets(VNode v, String indent) {
-		for (VNode n : v.getChildren()) {
-			System.out.println(indent + v.getName() + "'s child " + n.getName()
-					+ "'s set: " + n.printSet());
-			printChildSets(n, indent + "\t");
-		}
-	}
+	// private void printChildSets(VNode v, String indent) {
+	// for (VNode n : v.getChildren()) {
+	// System.out.println(indent + v.getName() + "'s child " + n.getName()
+	// + "'s set: " + n.printSet());
+	// printChildSets(n, indent + "\t");
+	// }
+	// }
 
 }

@@ -1,7 +1,6 @@
 package se.bth.vajo.alg.tarjan;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import se.bth.vajo.alg.tarjan.CONSTANTS.NODE_COLOR;
 

@@ -3,7 +3,6 @@ package se.bth.vajo.alg.tarjan;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -191,13 +190,6 @@ public class XMLTree {
 				return false;
 
 		} else if (this.filename == CONSTANTS.CASE_1000_CHILDREN) {
-			// if (n.getBorn() == 1243 && n.getName().equals("JALYNN")) {
-			// return true;
-			// } else if (n.getBorn() == 1325 && n.getName().equals("JULIETTA"))
-			// {
-			// return true;
-			// } else
-			// return false;
 
 			if (n.getBorn() == 1406 && n.getName().equals("ALINE")) {
 				return true;
@@ -242,15 +234,7 @@ public class XMLTree {
 				return true;
 			} else
 				return false;
-		} else if (this.filename == CONSTANTS.CASE_ONE_MILLION_CHILDREN_1K_GENERATIONS) {
-
-			if (n.getId() == 885168) {
-				return true;
-			} else if (n.getId() == 13038) {
-				return true;
-			} else
-				return false;
-		}
+		} 
 
 		else
 			return false;
